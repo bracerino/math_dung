@@ -100,7 +100,6 @@ def init_game():
 
 
 def reset_game_state():
-    """Forcefully resets the entire game state for a new game."""
     st.session_state.player = PLAYER_INITIAL_STATS.copy()
     st.session_state.current_enemy = None
     st.session_state.game_log = []
@@ -110,9 +109,9 @@ def reset_game_state():
     st.session_state.game_over = False
     generate_enemy()
 
-enemy_multiplier=0.65
+
 def generate_enemy():
-    """Generates a new enemy and resets battle-specific stats."""
+    enemy_multiplier=0.65
     level = st.session_state.dungeon_level
 
     selected_enemy_data = random.choice(ENEMIES_LIST)
