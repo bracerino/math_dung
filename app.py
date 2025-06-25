@@ -323,7 +323,7 @@ def enemy_attack():
     if random.randint(1, 100) <= enemy['accuracy']:
         damage = enemy['attack'] + random.randint(0, 3 * st.session_state.dungeon_level)
         player['hp'] = max(0, player['hp'] - damage)
-        log_message(f"The {enemy['name']} hits you for {damage} damage!")
+        log_message(f"The {enemy['name']} **hits you** for **{damage}** damage!")
         st.session_state.battle_summary["damage_taken"] += damage
     else:
         log_message(f"The {enemy['name']}'s attack missed!")
