@@ -281,7 +281,7 @@ def calculate_time_bonus(time_taken):
     if time_taken < 10.0:
         heal_amt = st.session_state.player['level'] * 3
         return {"bonus_damage": 0, "heal_amount": heal_amt,
-                "message": f"🩹 Precise calculation! You heal for {heal_amt} HP.", "time_out": False}
+                "message": f"🩹 Precise calculation! You **heal** for **{heal_amt} HP**.", "time_out": False}
 
     return {"bonus_damage": 0, "heal_amount": 0, "message": "", "time_out": False}
 
