@@ -110,7 +110,7 @@ def reset_game_state():
     st.session_state.game_over = False
     generate_enemy()
 
-
+enemy_multiplier=0.65
 def generate_enemy():
     """Generates a new enemy and resets battle-specific stats."""
     level = st.session_state.dungeon_level
@@ -120,11 +120,11 @@ def generate_enemy():
     st.session_state.current_enemy = {
         "name": f"{selected_enemy_data['name']} (Lvl {level})",
         "image_path": selected_enemy_data['image'],
-        "hp": ENEMY_BASE_STATS["hp"] * level,
-        "max_hp": ENEMY_BASE_STATS["hp"] * level,
-        "attack": ENEMY_BASE_STATS["attack"] * level,
-        "accuracy": ENEMY_BASE_STATS["accuracy"] + level,
-        "speed": ENEMY_BASE_STATS["speed"] + (level // 2),
+        "hp": ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,
+        "max_hp": ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,
+        "attack": ENEMY_BASE_STATS["attack"] * level*enemy_multiplier,
+        "accuracy": ENEMY_BASE_STATS["accuracy"] + level*enemy_multiplier,
+        "speed": ENEMY_BASE_STATS["speed"] + (level // 2)*enemy_multiplier,
         "xp_reward": ENEMY_BASE_STATS["xp_reward"] * level
     }
     # Reset summary for the new battle
