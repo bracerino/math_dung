@@ -1,6 +1,5 @@
 QUESTION_TOPICS = {
     "XRD": [
-        # --- Existing Questions ---
         {
             "question": "What does XRD stand for?",
             "options": ["X-Ray Diffraction", "X-Ray Detection", "X-Ray Distribution", "X-Ray Development"],
