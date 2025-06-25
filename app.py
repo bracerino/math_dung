@@ -201,7 +201,7 @@ def render_sidebar_stats():
     with st.sidebar:
         st.header("Your Hero")
 
-        player_image_path = Path("images/player.png")
+        player_image_path = Path("images/player2.png")
         if player_image_path.is_file():
             st.image(str(player_image_path), caption=f"Level {player['level']} Adventurer")
         else:
