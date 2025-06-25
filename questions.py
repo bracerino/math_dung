@@ -7,6 +7,11 @@ QUESTION_TOPICS = {
             "correct": 0
         },
         {
+            "question": "Fully focusing monochromator crystal is named after:",
+            "options": ["Janner", "Johann", "Janssen", "Johansson"],
+            "correct": 3
+        },
+        {
             "question": "What is Bragg's Law equation?",
             "options": ["$nλ = 2d \\sin θ$", "$nλ = d \\sin θ$", "$λ = 2d \\sin θ$", "$n = 2dλ \\sin θ$"],
             "correct": 0
