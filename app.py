@@ -120,6 +120,8 @@ def apply_custom_styling():
                 grid-template-columns: 1fr 1fr !important;
                 gap: 0.5rem !important;
             }
+
+            /* Fixed styling for dark mode compatibility */
             .stRadio [role="radiogroup"] > label {
                 margin: 0 !important;
                 display: flex !important;
@@ -127,20 +129,54 @@ def apply_custom_styling():
                 font-size: 1.3rem !important;
                 font-weight: 500 !important;
                 padding: 0.8rem !important;
-                border: 2px solid #ddd !important;
+                border: 2px solid var(--border-color, #ddd) !important;
                 border-radius: 8px !important;
-                background-color: #f8f9fa !important;
+                background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
+                color: var(--text-color, inherit) !important;
                 cursor: pointer !important;
                 transition: all 0.2s ease !important;
             }
+
+            /* Light mode specific */
+            [data-theme="light"] .stRadio [role="radiogroup"] > label {
+                --border-color: #ddd;
+                --bg-color: #f8f9fa;
+                --text-color: #333;
+            }
+
+            /* Dark mode specific */  
+            [data-theme="dark"] .stRadio [role="radiogroup"] > label,
+            .stApp[data-theme="dark"] .stRadio [role="radiogroup"] > label {
+                --border-color: #555;
+                --bg-color: rgba(255, 255, 255, 0.1);
+                --text-color: #fff;
+            }
+
+            /* Fallback for dark mode detection */
+            @media (prefers-color-scheme: dark) {
+                .stRadio [role="radiogroup"] > label {
+                    border-color: #555 !important;
+                    background-color: rgba(255, 255, 255, 0.1) !important;
+                    color: #fff !important;
+                }
+            }
+
             .stRadio [role="radiogroup"] > label:hover {
                 border-color: #007bff !important;
-                background-color: #e3f2fd !important;
+                background-color: rgba(0, 123, 255, 0.2) !important;
             }
+
             .stRadio [role="radiogroup"] > label > div {
                 font-size: 1.3rem !important;
                 margin-left: 0.5rem !important;
+                color: inherit !important;
             }
+
+            /* Ensure radio button itself is visible */
+            .stRadio [role="radiogroup"] > label input[type="radio"] {
+                accent-color: #007bff !important;
+            }
+
             .time-warning {
                 color: #ff4444 !important;
                 font-weight: bold;
