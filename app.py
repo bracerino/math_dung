@@ -47,7 +47,7 @@ ANSWER_TIME_LIMIT = 15.0  # seconds
 
 def apply_custom_styling():
 
-    st.set_page_config(layout="wide")
+    st.set_page_config(layout="wide", initial_sidebar_state="expanded",)
     st.markdown("""
         <style>
             .stApp {
@@ -473,7 +473,8 @@ def main():
                     st.session_state.math_problem = generate_math_problem()
                 st.rerun()
 
-            st.progress(time_left / ANSWER_TIME_LIMIT, text=f"Time Left: {time_left:.1f}s")
+            #st.progress(time_left / ANSWER_TIME_LIMIT, text=f"Time Left: {time_left:.1f}s")
+            st.progress(time_left / ANSWER_TIME_LIMIT, text=f"⌛ Time is ticking...")
             st.markdown(f'<p class="math-question">Solve this:<br><code>{problem["question"]}</code></p>',
                         unsafe_allow_html=True)
 
