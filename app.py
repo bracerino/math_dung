@@ -119,11 +119,11 @@ def generate_enemy():
     st.session_state.current_enemy = {
         "name": f"{selected_enemy_data['name']} (Lvl {level})",
         "image_path": selected_enemy_data['image'],
-        "hp": ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,
-        "max_hp": ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,
-        "attack": ENEMY_BASE_STATS["attack"] * level*enemy_multiplier,
-        "accuracy": ENEMY_BASE_STATS["accuracy"] + level*enemy_multiplier,
-        "speed": ENEMY_BASE_STATS["speed"] + (level // 2)*enemy_multiplier,
+        "hp": round(ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,1),
+        "max_hp": round(ENEMY_BASE_STATS["hp"] * level*enemy_multiplier,1),
+        "attack": round(ENEMY_BASE_STATS["attack"] * level*enemy_multiplier,1),
+        "accuracy": round(ENEMY_BASE_STATS["accuracy"] + level*enemy_multiplier,1),
+        "speed": round(ENEMY_BASE_STATS["speed"] + (level // 2)*enemy_multiplier,1),
         "xp_reward": ENEMY_BASE_STATS["xp_reward"] * level
     }
     # Reset summary for the new battle
@@ -276,7 +276,7 @@ def calculate_time_bonus(time_taken):
     if time_taken < 5.0:
         bonus_dmg = st.session_state.player['level'] * 2
         return {"bonus_damage": bonus_dmg, "heal_amount": 0,
-                "message": f"⚡ Quick thinking! You deal +{bonus_dmg} bonus damage!", "time_out": False}
+                "message": f"⚡ Quick thinking! You deal **+{bonus_dmg} bonus damage**!", "time_out": False}
 
     if time_taken < 10.0:
         heal_amt = st.session_state.player['level'] * 3
@@ -307,7 +307,7 @@ def player_attack(answer_correct, bonus):
         base_damage = player['intelligence'] + random.randint(player['level'], player['level'] * 3)
         total_damage = base_damage + bonus["bonus_damage"]
         enemy['hp'] = max(0, enemy['hp'] - total_damage)
-        log_message(f"✅ Correct! You strike the {enemy['name']} for {total_damage} damage!")
+        log_message(f"✅ Correct! You strike for **{total_damage} damage**!")
     else:
         log_message("Your attack missed!")
 
@@ -342,7 +342,7 @@ def handle_victory():
 
     xp_gain = enemy['xp_reward']
     player['xp'] += xp_gain
-    log_message(f"You gained {xp_gain} XP!")
+    log_message(f"You gained **{xp_gain} XP**!")
 
     st.session_state.battle_summary['enemy_name'] = enemy['name']
     st.session_state.battle_summary['xp_gain'] = xp_gain
