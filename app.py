@@ -50,11 +50,11 @@ RPS_EMOJIS = {"Rock": "🪨", "Paper": "📄", "Scissors": "✂️"}
 
 
 RPS_STAT_BONUSES = [
-    {"type": "attack", "amount": 2, "message": "⚔️ Your victory sharpens your blade! +2 Attack"},
-    {"type": "accuracy", "amount": 5, "message": "🎯 Your focus improves! +5% Accuracy"},
+    {"type": "attack", "amount": 1, "message": "⚔️ Your victory sharpens your blade! +2 Attack"},
+    {"type": "accuracy", "amount": 1, "message": "🎯 Your focus improves! +5% Accuracy"},
     {"type": "speed", "amount": 1, "message": "💨 You feel more agile! +1 Speed"},
     {"type": "intelligence", "amount": 1, "message": "🧠 Your tactical thinking improves! +1 Intelligence"},
-    {"type": "max_hp", "amount": 10, "message": "❤️ Your confidence boosts your vitality! +10 Max HP"}
+    {"type": "max_hp", "amount": 2, "message": "❤️ Your confidence boosts your vitality! +10 Max HP"}
 ]
 
 
