@@ -346,3 +346,174 @@ QUESTION_TOPICS = {
         }
     ]
 }
+
+
+CLASSICAL_LITERATURE = {
+    "Classical Literature": [
+        {
+            "question": "Who is the author of 'Pride and Prejudice'?",
+            "options": ["Charlotte Brontë", "Mary Shelley", "Jane Austen", "George Eliot"],
+            "correct": 2
+        },
+        {
+            "question": "In 'Moby Dick', what is the name of the captain obsessed with hunting the white whale?",
+            "options": ["Ishmael", "Starbuck", "Ahab", "Queequeg"],
+            "correct": 2
+        },
+        {
+            "question": "Which of these is a famous tragedy by William Shakespeare?",
+            "options": ["A Midsummer Night's Dream", "The Tempest", "As You Like It", "Hamlet"],
+            "correct": 3
+        },
+        {
+            "question": "Fyodor Dostoevsky's 'Crime and Punishment' primarily follows which character?",
+            "options": ["Dmitri Karamazov", "Prince Myshkin", "Raskolnikov", "Alyosha Karamazov"],
+            "correct": 2
+        },
+        {
+            "question": "What is the opening line of Leo Tolstoy's 'Anna Karenina'?",
+            "options": [
+                "'It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.'",
+                "'Call me Ishmael.'",
+                "'All happy families are alike; each unhappy family is unhappy in its own way.'",
+                "'It was the best of times, it was the worst of times...'"
+            ],
+            "correct": 2
+        },
+        {
+            "question": "Who wrote the epic poems 'The Iliad' and 'The Odyssey'?",
+            "options": ["Virgil", "Homer", "Sophocles", "Ovid"],
+            "correct": 1
+        },
+        {
+            "question": "The novel '1984', which introduced concepts like 'Big Brother' and 'thoughtcrime', was written by whom?",
+            "options": ["Aldous Huxley", "Ray Bradbury", "George Orwell", "H.G. Wells"],
+            "correct": 2
+        },
+        {
+            "question": "In Dante Alighieri's 'Inferno', who guides Dante through the nine circles of Hell?",
+            "options": ["Beatrice", "Charon", "Saint Peter", "Virgil"],
+            "correct": 3
+        },
+        {
+            "question": "'To Kill a Mockingbird' is set in which fictional town in Alabama?",
+            "options": ["Macomb", "Maycomb", "West Egg", "St. Petersburg"],
+            "correct": 1
+        },
+        {
+            "question": "Which author wrote 'Don Quixote', a pioneering work of Western literature?",
+            "options": ["Jorge Luis Borges", "Gabriel García Márquez", "Miguel de Cervantes", "Isabel Allende"],
+            "correct": 2
+        }
+    ]
+}
+
+ANIMATED_MOVIES = {
+    "Animated Disney and Pixar Movies": [
+        # --- First set of questions ---
+        {
+            "question": "In Disney's 'The Lion King', what is the name of Simba's wicked uncle?",
+            "options": ["Mufasa", "Zazu", "Scar", "Pumbaa"],
+            "correct": 2
+        },
+        {
+            "question": "What is the name of the cowboy doll and central character in Pixar's 'Toy Story'?",
+            "options": ["Buzz Lightyear", "Woody", "Mr. Potato Head", "Slinky Dog"],
+            "correct": 1
+        },
+        {
+            "question": "In 'Frozen', what is the name of the magical snowman created by Elsa?",
+            "options": ["Sven", "Kristoff", "Hans", "Olaf"],
+            "correct": 3
+        },
+        {
+            "question": "The Pixar movie 'Up' features a house lifted by thousands of what?",
+            "options": ["Propellers", "Jet Engines", "Balloons", "Birds"],
+            "correct": 2
+        },
+        {
+            "question": "In 'Aladdin', what is the first wish Aladdin asks of the Genie?",
+            "options": ["To be rich", "To get out of the cave", "To become a prince", "To win Jasmine's heart"],
+            "correct": 2
+        },
+        {
+            "question": "What type of fish are Marlin and Nemo in Pixar's 'Finding Nemo'?",
+            "options": ["Blue Tang", "Goldfish", "Clownfish", "Pufferfish"],
+            "correct": 2
+        },
+        {
+            "question": "In 'Moana', the ocean is a character that helps Moana on her quest to find whom?",
+            "options": ["The goddess Te Fiti", "Her ancestor, Maui", "The demigod Maui", "The lava monster Te Kā"],
+            "correct": 2
+        },
+        {
+            "question": "What is the motto of the monster world in 'Monsters, Inc.'?",
+            "options": ["'We Scare Because We Care'", "'Screaming is our business'", "'Your fear is our fuel'", "'Got a scream? We're your team!'"],
+            "correct": 0
+        },
+        {
+            "question": "In Disney's 'Beauty and the Beast', what is the name of the enchanted candelabra?",
+            "options": ["Cogsworth", "Lumière", "Gaston", "Chip"],
+            "correct": 1
+        },
+        {
+            "question": "The main character in Pixar's 'Ratatouille', a rat with a passion for cooking, is named:",
+            "options": ["Emile", "Django", "Linguini", "Remy"],
+            "correct": 3
+        },
+        # --- Second set of questions ---
+        {
+            "question": "In Pixar's 'Inside Out', which emotion is the leader of the group in Riley's mind?",
+            "options": ["Sadness", "Anger", "Fear", "Joy"],
+            "correct": 3
+        },
+        {
+            "question": "What is the name of the kingdom where Disney's 'Tangled' is set?",
+            "options": ["Arendelle", "Corona", "Atlantica", "Maldonia"],
+            "correct": 1
+        },
+        {
+            "question": "In 'The Incredibles', what is the superpower of the daughter, Violet Parr?",
+            "options": ["Super speed", "Invisibility and force fields", "Elasticity", "Super strength"],
+            "correct": 1
+        },
+        {
+            "question": "What kind of animal is the demigod Maui in Disney's 'Moana' able to transform into with his fishhook?",
+            "options": ["A lion", "A shark", "A giant hawk", "A gecko"],
+            "correct": 2
+        },
+        {
+            "question": "In Pixar's 'Coco', what must Miguel obtain to return to the Land of the Living?",
+            "options": ["A magical guitar", "His family's blessing", "The marigold bridge", "A special song"],
+            "correct": 1
+        },
+        {
+            "question": "What is the name of the restaurant that Remy the rat works at in 'Ratatouille'?",
+            "options": ["Le Grand Véfour", "La Tour d'Argent", "Auguste Gusteau's", "Le Procope"],
+            "correct": 2
+        },
+        {
+            "question": "In Disney's 'Zootopia', what are the respective professions of the two main characters, Judy Hopps and Nick Wilde?",
+            "options": ["Farmer and thief", "Police officer and con artist", "Mayor and journalist", "Dancer and musician"],
+            "correct": 1
+        },
+        {
+            "question": "Which Pixar movie is set in a post-apocalyptic Earth where a small robot is left to clean up the planet?",
+            "options": ["Cars", "Up", "Brave", "WALL-E"],
+            "correct": 3
+        },
+        {
+            "question": "In 'Mulan', what is the name of the small, red dragon who serves as Mulan's guardian?",
+            "options": ["Li Shang", "Mushu", "Cri-Kee", "Yao"],
+            "correct": 1
+        },
+        {
+            "question": "In 'Toy Story 2', Woody is stolen by a collector who owns which themed restaurant?",
+            "options": ["Pizza Planet", "Al's Toy Barn", "The Poultry Palace", "Flo's V8 Cafe"],
+            "correct": 1
+        }
+    ]
+}
+
+QUESTION_TOPICS.update(ANIMATED_MOVIES)
+QUESTION_TOPICS.update(CLASSICAL_LITERATURE)
