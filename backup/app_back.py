@@ -42,6 +42,8 @@ ENEMIES_LIST = [
 ]
 
 from questions import *
+from numerical_questions import *
+
 
 BASE_ANSWER_TIME_LIMIT = 15.0
 
@@ -242,11 +244,65 @@ def generate_enemy():
     log_message(f"A wild **{st.session_state.current_enemy['name']}** appears!")
 
 
+
+
+
+
 def generate_problem():
-    if random.random() < 0.5:
+    rand = random.random()
+    if rand < 0.35:  # 35% math problems
         return generate_math_problem()
-    else:
+    elif rand < 0.55:  # 15% numerical questions (0.35 to 0.50)
+        return generate_numerical_question()
+    else:  # 50% multiple choice questions
         return generate_multiple_choice_question()
+
+
+def generate_numerical_question():
+    topic = random.choice(list(NUMERICAL_QUESTIONS.keys()))
+    question_data = random.choice(NUMERICAL_QUESTIONS[topic])
+
+    st.session_state.question_start_time = time.time()
+    st.session_state.time_out_attack_done = False
+
+    return {
+        "type": "numerical",
+        "topic": topic,
+        "question": question_data["question"],
+        "answer": question_data["answer"]
+    }
+
+
+def handle_numerical_turn(player_answer):
+    problem = st.session_state.current_problem
+    time_taken = time.time() - st.session_state.question_start_time
+    is_correct = (player_answer == problem['answer'])
+
+    bonus = calculate_time_bonus(time_taken)
+
+    player_speed = st.session_state.player['speed']
+    enemy_speed = st.session_state.current_enemy['speed']
+
+    if is_correct:
+        log_message("🛡️ **Perfect knowledge!** Your precise answer leaves the enemy stunned and unable to counterattack!")
+        player_attack(is_correct, bonus, time_taken)
+    else:
+        if player_speed >= enemy_speed:
+            player_attack(is_correct, bonus, time_taken)
+            if st.session_state.current_enemy and st.session_state.current_enemy['hp'] > 0:
+                enemy_attack()
+        else:
+            enemy_attack()
+            if st.session_state.player['hp'] > 0:
+                player_attack(is_correct, bonus, time_taken)
+
+    commit_round_log()
+
+    if st.session_state.current_enemy:
+        st.session_state.current_problem = generate_problem()
+    st.rerun()
+
+
 
 
 def generate_math_problem():
@@ -713,7 +769,17 @@ def main():
                     submitted = st.form_submit_button("Attack!", use_container_width=True, type="primary")
                     if submitted:
                         handle_mcq_turn(selected_option)
+            elif problem["type"] == "numerical":
+                st.markdown(f'<div class="mcq-question">🔢 {problem["topic"]}<br>{problem["question"]}</div>',
+                            unsafe_allow_html=True)
 
+                with st.form("numerical_form", clear_on_submit=True):
+                    user_answer = st.number_input("Your answer:", value=None, step=1, format="%d",
+                                                  key="numerical_answer_input", label_visibility="collapsed",
+                                                  placeholder="Enter the exact number...")
+                    submitted = st.form_submit_button("Attack!", use_container_width=True, type="primary")
+                    if submitted and user_answer is not None:
+                        handle_numerical_turn(int(user_answer))
         with log_col:
             render_game_log()
 
