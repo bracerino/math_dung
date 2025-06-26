@@ -3,6 +3,10 @@ import random
 import time
 from pathlib import Path
 
+st.set_page_config(layout="wide", initial_sidebar_state="expanded", )
+
+
+
 PLAYER_INITIAL_STATS = {
     "level": 1,
     "hp": 100,
@@ -41,6 +45,127 @@ ENEMIES_LIST = [
      "image": "images/horror.png"}
 ]
 
+RPS_OPTIONS = ["Rock", "Paper", "Scissors"]
+RPS_EMOJIS = {"Rock": "🪨", "Paper": "📄", "Scissors": "✂️"}
+
+
+RPS_STAT_BONUSES = [
+    {"type": "attack", "amount": 2, "message": "⚔️ Your victory sharpens your blade! +2 Attack"},
+    {"type": "accuracy", "amount": 5, "message": "🎯 Your focus improves! +5% Accuracy"},
+    {"type": "speed", "amount": 1, "message": "💨 You feel more agile! +1 Speed"},
+    {"type": "intelligence", "amount": 1, "message": "🧠 Your tactical thinking improves! +1 Intelligence"},
+    {"type": "max_hp", "amount": 10, "message": "❤️ Your confidence boosts your vitality! +10 Max HP"}
+]
+
+
+def generate_rps_problem():
+    enemy_choice = random.choice(RPS_OPTIONS)
+
+    st.session_state.question_start_time = time.time()
+    st.session_state.time_out_attack_done = False
+
+    return {
+        "type": "rps",
+        "enemy_choice": enemy_choice,
+        "question": "Choose your move in this battle of wits!"
+    }
+
+
+def handle_rps_turn(player_choice):
+    if st.session_state.get('question_start_time'):
+        time_taken = time.time() - st.session_state.question_start_time
+        time_limit = get_answer_time_limit()
+
+        if time_taken > time_limit:
+            log_message("⏰ Too slow! The enemy takes advantage of your hesitation!")
+            enemy_attack()
+            commit_round_log()
+            if st.session_state.current_enemy:
+                st.session_state.current_problem = generate_problem()
+            st.rerun()
+            return
+
+    problem = st.session_state.current_problem
+    enemy_choice = problem["enemy_choice"]
+
+    log_message(f"You chose: {RPS_EMOJIS[player_choice]} **{player_choice}**")
+    log_message(f"Enemy chose: {RPS_EMOJIS[enemy_choice]} **{enemy_choice}**")
+
+    result = determine_rps_winner(player_choice, enemy_choice)
+
+    if result == "win":
+        log_message("🎉 **You WIN the battle of wits!**")
+
+        player = st.session_state.player
+        enemy = st.session_state.current_enemy
+
+        if random.randint(1, 100) <= player['accuracy']:
+            base_damage = player['attack'] + random.randint(player['level'], player['level'] * 3)
+            enemy['hp'] = max(0, enemy['hp'] - base_damage)
+            log_message(f"✅⚔️ Your strategic victory leads to a devastating attack for **{base_damage} damage**!")
+        else:
+            log_message("Your attack missed despite your tactical advantage!")
+
+        bonus = random.choice(RPS_STAT_BONUSES)
+        apply_rps_bonus(bonus)
+        log_message(bonus["message"])
+        st.session_state.battle_summary["bonuses"].append(bonus["message"])
+
+        if enemy['hp'] <= 0:
+            handle_victory()
+
+    elif result == "lose":
+        log_message("😤 **The enemy outsmarts you!**")
+
+        enemy_attack()
+
+    else:
+        log_message("🤝 **It's a tie!** Both fighters circle each other warily...")
+        log_message("No one gains an advantage this round.")
+
+    commit_round_log()
+
+    if st.session_state.current_enemy:
+        st.session_state.current_problem = generate_problem()
+    st.rerun()
+
+
+def determine_rps_winner(player_choice, enemy_choice):
+    if player_choice == enemy_choice:
+        return "tie"
+
+    winning_combinations = {
+        "Rock": "Scissors",
+        "Paper": "Rock",
+        "Scissors": "Paper"
+    }
+
+    if winning_combinations[player_choice] == enemy_choice:
+        return "win"
+    else:
+        return "lose"
+
+
+def apply_rps_bonus(bonus):
+    player = st.session_state.player
+
+    if bonus["type"] == "attack":
+        player["attack"] += bonus["amount"]
+    elif bonus["type"] == "accuracy":
+        player["accuracy"] += bonus["amount"]
+    elif bonus["type"] == "speed":
+        player["speed"] += bonus["amount"]
+    elif bonus["type"] == "intelligence":
+        player["intelligence"] += bonus["amount"]
+    elif bonus["type"] == "max_hp":
+        player["max_hp"] += bonus["amount"]
+        player["hp"] += bonus["amount"]
+
+
+
+
+
+
 from questions import *
 from numerical_questions import *
 
@@ -54,7 +179,6 @@ def get_answer_time_limit():
 
 
 def apply_custom_styling():
-    st.set_page_config(layout="wide", initial_sidebar_state="expanded", )
     st.markdown("""
         <style>
             .stApp {
@@ -189,6 +313,33 @@ def apply_custom_styling():
                 50% { opacity: 0.5; }
                 100% { opacity: 1; }
             }
+            .rps-question {
+                font-size: 1.5rem !important;
+                font-weight: bold;
+                text-align: center;
+                padding: 1rem;
+                background: linear-gradient(90deg, #8e44ad, #e74c3c);
+                color: white;
+                border-radius: 10px;
+                margin-bottom: 1rem;
+            }
+            .rps-option {
+                font-size: 3rem !important;
+                text-align: center;
+                padding: 1rem;
+                margin: 0.5rem;
+                border: 3px solid #ddd;
+                border-radius: 15px;
+                background-color: #f8f9fa;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .rps-option:hover {
+                border-color: #e74c3c;
+                background-color: #ffeaa7;
+                transform: scale(1.05);
+            }
+
         </style>
     """, unsafe_allow_html=True)
 
@@ -247,14 +398,15 @@ def generate_enemy():
 
 
 
-
 def generate_problem():
     rand = random.random()
-    if rand < 0.35:  # 35% math problems
+    if rand < 0.25:  # 25% math problems
         return generate_math_problem()
-    elif rand < 0.55:  # 15% numerical questions (0.35 to 0.50)
+    elif rand < 0.50:  # 15% numerical questions
         return generate_numerical_question()
-    else:  # 50% multiple choice questions
+    elif rand < 0.75:  # 20% rock paper scissors
+        return generate_rps_problem()
+    else:  # 40% multiple choice questions
         return generate_multiple_choice_question()
 
 
@@ -284,7 +436,7 @@ def handle_numerical_turn(player_answer):
     enemy_speed = st.session_state.current_enemy['speed']
 
     if is_correct:
-        log_message("🛡️ **Perfect knowledge!** Your precise answer leaves the enemy stunned and unable to counterattack!")
+        log_message("✅🛡️ **Perfect knowledge!** Your precise answer leaves the enemy stunned and unable to counterattack!")
         player_attack(is_correct, bonus, time_taken)
     else:
         if player_speed >= enemy_speed:
@@ -729,6 +881,9 @@ def main():
             render_enemy_display()
 
             problem = st.session_state.current_problem
+            if not hasattr(st.session_state, 'question_start_time') or st.session_state.question_start_time is None:
+                return  # Skip the rest if timing isn't initialized yet
+
             time_elapsed = time.time() - st.session_state.question_start_time
             time_limit = get_answer_time_limit()
             time_left = max(0, time_limit - time_elapsed)
@@ -740,6 +895,8 @@ def main():
                             unsafe_allow_html=True)
 
             st.progress(time_left / time_limit, text=f"⌛ Time is ticking...")
+
+
 
             if problem["type"] == "math":
                 st.markdown(f'<p class="math-question">Solve this:<br><code>{problem["question"]}</code></p>',
@@ -780,6 +937,38 @@ def main():
                     submitted = st.form_submit_button("Attack!", use_container_width=True, type="primary")
                     if submitted and user_answer is not None:
                         handle_numerical_turn(int(user_answer))
+            elif problem["type"] == "rps":
+                st.markdown(f'<div class="rps-question">🎯 Battle of Wits<br>{problem["question"]}</div>',
+                            unsafe_allow_html=True)
+
+                with st.form("rps_form", clear_on_submit=True):
+                    col1, col2, col3 = st.columns(3)
+
+                    with col1:
+                        rock_button = st.form_submit_button(
+                            f"{RPS_EMOJIS['Rock']}\nRock",
+                            use_container_width=True,
+                            type="secondary"
+                        )
+                    with col2:
+                        paper_button = st.form_submit_button(
+                            f"{RPS_EMOJIS['Paper']}\nPaper",
+                            use_container_width=True,
+                            type="secondary"
+                        )
+                    with col3:
+                        scissors_button = st.form_submit_button(
+                            f"{RPS_EMOJIS['Scissors']}\nScissors",
+                            use_container_width=True,
+                            type="secondary"
+                        )
+
+                    if rock_button:
+                        handle_rps_turn("Rock")
+                    elif paper_button:
+                        handle_rps_turn("Paper")
+                    elif scissors_button:
+                        handle_rps_turn("Scissors")
         with log_col:
             render_game_log()
 
