@@ -6,6 +6,16 @@ from pathlib import Path
 st.set_page_config(layout="wide", initial_sidebar_state="expanded", )
 
 
+def render_game_log():
+    st.subheader("Last Round")
+    log_container = st.container(height=350)
+    if st.session_state.game_log:
+        for msg in st.session_state.game_log:
+            log_container.markdown(f'<div style="color: inherit; margin: 0.25rem 0; padding: 0.25rem; border-left: 3px solid #4CAF50; padding-left: 0.75rem; background-color: rgba(76, 175, 80, 0.05);">{msg}</div>', unsafe_allow_html=True)
+    else:
+        log_container.markdown('<div style="color: inherit; font-style: italic;">Battle begins...</div>', unsafe_allow_html=True)
+
+
 
 PLAYER_INITIAL_STATS = {
     "level": 1,
