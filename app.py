@@ -607,14 +607,6 @@ def render_enemy_display():
     st.divider()
 
 
-def render_game_log():
-    st.subheader("Last Round")
-    log_container = st.container(height=350)
-    if st.session_state.game_log:
-        for msg in st.session_state.game_log:
-            log_container.markdown(f"> {msg}")
-    else:
-        log_container.text("> Battle begins...")
 
 
 def render_victory_screen():
