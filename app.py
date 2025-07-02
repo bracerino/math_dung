@@ -439,6 +439,7 @@ def handle_numerical_turn(player_answer):
         log_message("✅🛡️ **Perfect knowledge!** Your precise answer leaves the enemy stunned and unable to counterattack!")
         player_attack(is_correct, bonus, time_taken)
     else:
+        log_message(f"❌ Wrong answer! The correct answer was **{problem['answer']}**.")
         if player_speed >= enemy_speed:
             player_attack(is_correct, bonus, time_taken)
             if st.session_state.current_enemy and st.session_state.current_enemy['hp'] > 0:
