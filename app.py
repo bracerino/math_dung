@@ -732,6 +732,8 @@ def handle_math_turn(player_answer):
 
     player_speed = st.session_state.player['speed']
     enemy_speed = st.session_state.current_enemy['speed']
+    if not is_correct:
+        log_message(f"❌ Wrong answer! The correct answer to **{problem['question']}** was **{problem['answer']}**.")
 
     if player_speed >= enemy_speed:
         player_attack(is_correct, bonus, time_taken)
@@ -758,6 +760,11 @@ def handle_mcq_turn(selected_option):
 
     player_speed = st.session_state.player['speed']
     enemy_speed = st.session_state.current_enemy['speed']
+
+    if not is_correct:
+        correct_option_text = problem['options'][problem['correct']]
+        correct_letter = chr(65 + problem['correct'])  # Convert to A, B, C, D
+        log_message(f"❌ Wrong answer! The correct answer was **{correct_letter}. {correct_option_text}**.")
 
     if player_speed >= enemy_speed:
         player_attack(is_correct, bonus, time_taken)
