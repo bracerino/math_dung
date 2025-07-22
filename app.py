@@ -55,6 +55,70 @@ ENEMIES_LIST = [
      "image": "images/horror.png"}
 ]
 
+ENEMY_SHOUTOUTS = {
+    "Goblin Grunt": [
+        "Me crush you with big stick! 💀",
+        "You no smart enough for goblin! 🧠",
+        "Goblin strongest in all dungeon! 💪",
+        "Your math weak like human baby! 👶",
+        "Me eat your brain for breakfast! 🍳"
+    ],
+    "Orc Bruiser": [
+        "GRAAAAHHH! Orc smash puny human! ⚔️",
+        "Your calculations mean nothing to ORC POWER! 💥",
+        "Me solve problems with FISTS! 👊",
+        "Dungeon belong to ORC now! 🏰",
+        "You think too much, fight too little! ⚡"
+    ],
+    "Stone Golem": [
+        "...PROCESSING... HUMAN WILL BE... ELIMINATED... 🤖",
+        "STONE LOGIC > HUMAN LOGIC... CALCULATING DEFEAT... 📊",
+        "...ERROR... HUMAN INTELLIGENCE TOO LOW... ⚠️",
+        "ACTIVATING COMBAT PROTOCOLS... PREPARE FOR TERMINATION... ⚙️",
+        "...ANALYSIS COMPLETE... VICTORY PROBABILITY: 99.9%... 📈"
+    ],
+    "Shadow Stalker": [
+        "Hehehe... your mind is full of darkness... 🌑",
+        "The shadows whisper your failures... 👻",
+        "Knowledge fades in the presence of shadow... 📚",
+        "Can you solve what you cannot see? 👁️",
+        "Your light dims with each wrong answer... 🕯️"
+    ],
+    "Dungeon Troll": [
+        "TROLL HUNGRY! BRAIN FOOD TASTE GOOD! 🧠",
+        "Me count to three... ONE... TWO... SMASH! 🔢",
+        "Under bridge, troll always win! 🌉",
+        "You pay troll toll with your SOUL! 💀",
+        "Big club solve all math problems! 🏏"
+    ],
+    "Arcane Horror": [
+        "The equations of doom shall consume you! 🔮",
+        "Mathematics bend to my eldritch will! 📐",
+        "Your mortal mind cannot comprehend TRUE calculation! 👁️",
+        "I have mastered the dark arts of ALGEBRA! ✨",
+        "Reality itself is but numbers... and I control them ALL! 🌌"
+    ]
+}
+
+
+def get_enemy_shoutout(enemy_name):
+    import random
+    base_name = enemy_name.split(" (Lvl")[0]
+
+    if base_name in ENEMY_SHOUTOUTS:
+        return random.choice(ENEMY_SHOUTOUTS[base_name])
+    else:
+        default_shouts = [
+            "Prepare to face your doom! ⚔️",
+            "You cannot defeat me! 💪",
+            "Your knowledge is worthless here! 🧠",
+            "I will crush your spirit! 💀",
+            "This dungeon will be your tomb! 🏰"
+        ]
+        return random.choice(default_shouts)
+
+
+
 RPS_OPTIONS = ["Rock", "Paper", "Scissors"]
 RPS_EMOJIS = {"Rock": "🪨", "Paper": "📄", "Scissors": "✂️"}
 
@@ -704,9 +768,52 @@ def render_enemy_display():
     if not enemy:
         return
 
+
     img_col, stats_col = st.columns([1, 2])
 
+
     with img_col:
+        shoutout = get_enemy_shoutout(enemy['name'])
+
+        st.markdown(f"""
+                    <div style="
+                        position: relative;
+                        background: white;
+                        border: 3px solid #333;
+                        border-radius: 20px;
+                        padding: 15px 20px;
+                        margin: 0 auto 20px auto;
+                        max-width: 300px;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        text-align: center;
+                        color: #333;
+                        box-shadow: 3px 3px 0px #666;
+                        transform: rotate(-2deg);
+                    ">
+                        "{shoutout}"
+                        <div style="
+                            position: absolute;
+                            bottom: -15px;
+                            left: 50px;
+                            width: 0;
+                            height: 0;
+                            border-left: 15px solid transparent;
+                            border-right: 15px solid transparent;
+                            border-top: 15px solid white;
+                        "></div>
+                        <div style="
+                            position: absolute;
+                            bottom: -18px;
+                            left: 47px;
+                            width: 0;
+                            height: 0;
+                            border-left: 18px solid transparent;
+                            border-right: 18px solid transparent;
+                            border-top: 18px solid #333;
+                        "></div>
+                    </div>
+                """, unsafe_allow_html=True)
         st.image(enemy["image_path"])
 
     with stats_col:
@@ -714,6 +821,7 @@ def render_enemy_display():
         st.write(f"**HP:**")
         st.progress(enemy['hp'] / enemy['max_hp'], text=f"{enemy['hp']}/{enemy['max_hp']}")
         st.info(f"⚔️ Attack: {enemy['attack']} | 🎯 Accuracy: {enemy['accuracy']}% | 💨 Speed: {enemy['speed']}")
+
 
 
 
@@ -1103,7 +1211,6 @@ def main():
                         handle_rps_turn("Scissors")
 
         with enemy_col:
-            st.divider()
             st.divider()
             render_enemy_display()
 
