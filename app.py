@@ -412,6 +412,7 @@ BASE_ANSWER_TIME_LIMIT = 30.0
 def get_answer_time_limit():
     intelligence = st.session_state.player.get('intelligence', 5)
     return BASE_ANSWER_TIME_LIMIT + (intelligence - 5)
+
 def apply_custom_styling():
     st.markdown("""
         <style>
@@ -495,16 +496,32 @@ def apply_custom_styling():
                 margin: 0 !important;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 1.8rem !important;  /* Increased from 1.3rem */
-                font-weight: 500 !important;
-                padding: 1.2rem !important;    /* Increased from 0.8rem */
-                border: 2px solid var(--border-color, #ddd) !important;
-                border-radius: 8px !important;
+                font-size: 2.2rem !important;  /* Much larger font size */
+                font-weight: 600 !important;   /* Bolder text */
+                padding: 1.5rem !important;    /* More padding */
+                border: 3px solid var(--border-color, #ddd) !important;
+                border-radius: 12px !important;
                 background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
                 color: var(--text-color, inherit) !important;
                 cursor: pointer !important;
                 transition: all 0.2s ease !important;
-                min-height: 4rem !important;   /* Added minimum height */
+                min-height: 5rem !important;   /* Taller buttons */
+                line-height: 1.3 !important;   /* Better line spacing */
+            }
+            
+            /* Target the actual text content inside radio buttons */
+            .stRadio [role="radiogroup"] > label > div:last-child {
+                font-size: 2.2rem !important;  /* Force larger text */
+                font-weight: 600 !important;
+                margin-left: 1rem !important;
+                flex: 1 !important;
+                line-height: 1.3 !important;
+            }
+            
+            /* Alternative targeting for radio button text */
+            .stRadio label span {
+                font-size: 2.2rem !important;
+                font-weight: 600 !important;
             }
 
             /* Light mode specific */
@@ -537,9 +554,11 @@ def apply_custom_styling():
             }
 
             .stRadio [role="radiogroup"] > label > div {
-                font-size: 1.8rem !important;  /* Increased from 1.3rem */
-                margin-left: 0.5rem !important;
+                font-size: 2.2rem !important;  /* Much larger text */
+                margin-left: 1rem !important;
                 color: inherit !important;
+                font-weight: 600 !important;
+                line-height: 1.3 !important;
             }
 
             /* Ensure radio button itself is visible */
