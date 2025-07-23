@@ -412,7 +412,6 @@ BASE_ANSWER_TIME_LIMIT = 30.0
 def get_answer_time_limit():
     intelligence = st.session_state.player.get('intelligence', 5)
     return BASE_ANSWER_TIME_LIMIT + (intelligence - 5)
-
 def apply_custom_styling():
     st.markdown("""
         <style>
@@ -446,6 +445,15 @@ def apply_custom_styling():
                 font-size: 2rem !important;
                 color: #ff4b4b;
             }
+            
+            /* Increase font size for number input fields */
+            .stNumberInput input {
+                font-size: 2rem !important;
+                text-align: center !important;
+                font-weight: bold !important;
+                height: 3rem !important;
+            }
+            
             .mcq-question {
                 font-size: 1.5rem !important;
                 font-weight: bold;
@@ -457,10 +465,10 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .mcq-option {
-                font-size: 1.3rem !important;
+                font-size: 1.8rem !important;  /* Increased from 1.3rem */
                 font-weight: 500;
-                padding: 0.8rem;
-                margin: 0.3rem;
+                padding: 1.2rem !important;    /* Increased padding */
+                margin: 0.5rem !important;     /* Increased margin */
                 border: 2px solid #ddd;
                 border-radius: 8px;
                 background-color: #f8f9fa;
@@ -482,20 +490,21 @@ def apply_custom_styling():
                 gap: 0.5rem !important;
             }
 
-            /* Fixed styling for dark mode compatibility */
+            /* Fixed styling for dark mode compatibility - INCREASED FONT SIZES */
             .stRadio [role="radiogroup"] > label {
                 margin: 0 !important;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 1.3rem !important;
+                font-size: 1.8rem !important;  /* Increased from 1.3rem */
                 font-weight: 500 !important;
-                padding: 0.8rem !important;
+                padding: 1.2rem !important;    /* Increased from 0.8rem */
                 border: 2px solid var(--border-color, #ddd) !important;
                 border-radius: 8px !important;
                 background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
                 color: var(--text-color, inherit) !important;
                 cursor: pointer !important;
                 transition: all 0.2s ease !important;
+                min-height: 4rem !important;   /* Added minimum height */
             }
 
             /* Light mode specific */
@@ -528,7 +537,7 @@ def apply_custom_styling():
             }
 
             .stRadio [role="radiogroup"] > label > div {
-                font-size: 1.3rem !important;
+                font-size: 1.8rem !important;  /* Increased from 1.3rem */
                 margin-left: 0.5rem !important;
                 color: inherit !important;
             }
@@ -536,6 +545,7 @@ def apply_custom_styling():
             /* Ensure radio button itself is visible */
             .stRadio [role="radiogroup"] > label input[type="radio"] {
                 accent-color: #007bff !important;
+                transform: scale(1.5) !important;  /* Make radio buttons larger */
             }
 
             .time-warning {
@@ -559,20 +569,28 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .rps-option {
-                font-size: 3rem !important;
+                font-size: 4rem !important;    /* Increased from 3rem */
                 text-align: center;
-                padding: 1rem;
+                padding: 1.5rem !important;    /* Increased padding */
                 margin: 0.5rem;
                 border: 3px solid #ddd;
                 border-radius: 15px;
                 background-color: #f8f9fa;
                 cursor: pointer;
                 transition: all 0.3s ease;
+                min-height: 6rem !important;   /* Added minimum height */
             }
             .rps-option:hover {
                 border-color: #e74c3c;
                 background-color: #ffeaa7;
                 transform: scale(1.05);
+            }
+            
+            /* Style for RPS form submit buttons */
+            .stForm button[type="submit"] {
+                font-size: 1.5rem !important;  /* Increased button text */
+                padding: 1rem 1.5rem !important;
+                min-height: 4rem !important;
             }
 
             /* Grade ladder animation */
