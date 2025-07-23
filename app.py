@@ -447,7 +447,6 @@ def apply_custom_styling():
                 color: #ff4b4b;
             }
             
-            /* Increase font size for number input fields */
             .stNumberInput input {
                 font-size: 2rem !important;
                 text-align: center !important;
@@ -466,10 +465,10 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .mcq-option {
-                font-size: 1.8rem !important;  /* Increased from 1.3rem */
+                font-size: 1.8rem !important;  
                 font-weight: 500;
-                padding: 1.2rem !important;    /* Increased padding */
-                margin: 0.5rem !important;     /* Increased margin */
+                padding: 1.2rem !important;    
+                margin: 0.5rem !important;    
                 border: 2px solid #ddd;
                 border-radius: 8px;
                 background-color: #f8f9fa;
@@ -491,14 +490,13 @@ def apply_custom_styling():
                 gap: 0.5rem !important;
             }
 
-            /* Fixed styling for dark mode compatibility - INCREASED FONT SIZES */
             .stRadio [role="radiogroup"] > label {
                 margin: 0 !important;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 2.2rem !important;  /* Much larger font size */
-                font-weight: 600 !important;   /* Bolder text */
-                padding: 1.5rem !important;    /* More padding */
+                font-size: 2.2rem !important;  
+                font-weight: 600 !important;   
+                padding: 1.5rem !important;    
                 border: 3px solid var(--border-color, #ddd) !important;
                 border-radius: 12px !important;
                 background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
@@ -554,7 +552,7 @@ def apply_custom_styling():
             }
 
             .stRadio [role="radiogroup"] > label > div {
-                font-size: 2.2rem !important;  /* Much larger text */
+                font-size: 2.2rem !important;  
                 margin-left: 1rem !important;
                 color: inherit !important;
                 font-weight: 600 !important;
@@ -564,7 +562,7 @@ def apply_custom_styling():
             /* Ensure radio button itself is visible */
             .stRadio [role="radiogroup"] > label input[type="radio"] {
                 accent-color: #007bff !important;
-                transform: scale(1.5) !important;  /* Make radio buttons larger */
+                transform: scale(1.5) !important;  
             }
 
             .time-warning {
@@ -588,16 +586,16 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .rps-option {
-                font-size: 4rem !important;    /* Increased from 3rem */
+                font-size: 4rem !important;   
                 text-align: center;
-                padding: 1.5rem !important;    /* Increased padding */
+                padding: 1.5rem !important;   
                 margin: 0.5rem;
                 border: 3px solid #ddd;
                 border-radius: 15px;
                 background-color: #f8f9fa;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                min-height: 6rem !important;   /* Added minimum height */
+                min-height: 6rem !important;  
             }
             .rps-option:hover {
                 border-color: #e74c3c;
