@@ -55,6 +55,70 @@ ENEMIES_LIST = [
      "image": "images/horror.png"}
 ]
 
+ENEMY_SHOUTOUTS = {
+    "Goblin Grunt": [
+        "Me crush you with big stick! 💀",
+        "You no smart enough for goblin! 🧠",
+        "Goblin strongest in all dungeon! 💪",
+        "Your math weak like human baby! 👶",
+        "Me eat your brain for breakfast! 🍳"
+    ],
+    "Orc Bruiser": [
+        "GRAAAAHHH! Orc smash puny human! ⚔️",
+        "Your calculations mean nothing to ORC POWER! 💥",
+        "Me solve problems with FISTS! 👊",
+        "Dungeon belong to ORC now! 🏰",
+        "You think too much, fight too little! ⚡"
+    ],
+    "Stone Golem": [
+        "...PROCESSING... HUMAN WILL BE... ELIMINATED... 🤖",
+        "STONE LOGIC > HUMAN LOGIC... CALCULATING DEFEAT... 📊",
+        "...ERROR... HUMAN INTELLIGENCE TOO LOW... ⚠️",
+        "ACTIVATING COMBAT PROTOCOLS... PREPARE FOR TERMINATION... ⚙️",
+        "...ANALYSIS COMPLETE... VICTORY PROBABILITY: 99.9%... 📈"
+    ],
+    "Shadow Stalker": [
+        "Hehehe... your mind is full of darkness... 🌑",
+        "The shadows whisper your failures... 👻",
+        "Knowledge fades in the presence of shadow... 📚",
+        "Can you solve what you cannot see? 👁️",
+        "Your light dims with each wrong answer... 🕯️"
+    ],
+    "Dungeon Troll": [
+        "TROLL HUNGRY! BRAIN FOOD TASTE GOOD! 🧠",
+        "Me count to three... ONE... TWO... SMASH! 🔢",
+        "Under bridge, troll always win! 🌉",
+        "You pay troll toll with your SOUL! 💀",
+        "Big club solve all math problems! 🏏"
+    ],
+    "Arcane Horror": [
+        "The equations of doom shall consume you! 🔮",
+        "Mathematics bend to my eldritch will! 📐",
+        "Your mortal mind cannot comprehend TRUE calculation! 👁️",
+        "I have mastered the dark arts of ALGEBRA! ✨",
+        "Reality itself is but numbers... and I control them ALL! 🌌"
+    ]
+}
+
+
+def get_enemy_shoutout(enemy_name):
+    import random
+    base_name = enemy_name.split(" (Lvl")[0]
+
+    if base_name in ENEMY_SHOUTOUTS:
+        return random.choice(ENEMY_SHOUTOUTS[base_name])
+    else:
+        default_shouts = [
+            "Prepare to face your doom! ⚔️",
+            "You cannot defeat me! 💪",
+            "Your knowledge is worthless here! 🧠",
+            "I will crush your spirit! 💀",
+            "This dungeon will be your tomb! 🏰"
+        ]
+        return random.choice(default_shouts)
+
+
+
 RPS_OPTIONS = ["Rock", "Paper", "Scissors"]
 RPS_EMOJIS = {"Rock": "🪨", "Paper": "📄", "Scissors": "✂️"}
 
@@ -66,6 +130,111 @@ RPS_STAT_BONUSES = [
     {"type": "intelligence", "amount": 1, "message": "🧠 Your tactical thinking improves! +1 Intelligence"},
     {"type": "max_hp", "amount": 2, "message": "❤️ Your confidence boosts your vitality! +10 Max HP"}
 ]
+GRADE_THRESHOLDS = {
+    "F": {"min_level": 1, "max_level": 1, "color": "#ff4444", "description": "Novice Explorer"},
+    "E": {"min_level": 2, "max_level": 3, "color": "#ff6666", "description": "Dungeon Newcomer"},
+    "D": {"min_level": 4, "max_level": 5, "color": "#ff8800", "description": "Dungeon Crawler"},
+    "C": {"min_level": 6, "max_level": 7, "color": "#ffcc00", "description": "Skilled Adventurer"},
+    "B": {"min_level": 8, "max_level": 9, "color": "#88cc00", "description": "Veteran Warrior"},
+    "A": {"min_level": 10, "max_level": float('inf'), "color": "#44aa44", "description": "Elite Champion"}
+}
+
+
+def get_current_grade(dungeon_level):
+    for grade, threshold in GRADE_THRESHOLDS.items():
+        if threshold["min_level"] <= dungeon_level <= threshold["max_level"]:
+            return grade, threshold
+    return "F", GRADE_THRESHOLDS["F"]
+
+
+def get_next_grade_info(current_grade):
+    grade_order = ["F", "E", "D", "C", "B", "A"]
+    current_index = grade_order.index(current_grade)
+
+    if current_index < len(grade_order) - 1:
+        next_grade = grade_order[current_index + 1]
+        return next_grade, GRADE_THRESHOLDS[next_grade]
+    return None, None
+
+
+def render_grade_ladder():
+    current_level = st.session_state.dungeon_level
+    current_grade, current_info = get_current_grade(current_level)
+    next_grade, next_info = get_next_grade_info(current_grade)
+
+    st.subheader("🏆 Achievement Ladder")
+
+    ladder_container = st.container()
+
+    with ladder_container:
+        grade_order = ["A", "B", "C", "D", "E", "F"]
+
+        for grade in grade_order:
+            grade_info = GRADE_THRESHOLDS[grade]
+            is_current = (grade == current_grade)
+            is_achieved = current_level >= grade_info["min_level"]
+
+
+            if is_current:
+                grade_html = f"""
+                <div style="
+                    background: linear-gradient(90deg, {grade_info['color']}, {grade_info['color']}88);
+                    border: 3px solid {grade_info['color']};
+                    border-radius: 12px;
+                    padding: 12px;
+                    margin: 8px 0;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 1.2rem;
+                    text-align: center;
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+                    animation: pulse 2s infinite;
+                ">
+                    🎖️ Grade {grade} - {grade_info['description']}<br>
+                    <small style="font-size: 0.9rem;">Level {grade_info['min_level']}-{grade_info['max_level'] if grade_info['max_level'] != float('inf') else '∞'} | Current: Level {current_level}</small>
+                </div>
+                """
+            elif is_achieved:
+                grade_html = f"""
+                <div style="
+                    background: linear-gradient(90deg, #666, #888);
+                    border: 2px solid #555;
+                    border-radius: 8px;
+                    padding: 8px;
+                    margin: 4px 0;
+                    color: #ccc;
+                    font-size: 1rem;
+                    text-align: center;
+                    opacity: 0.7;
+                ">
+                    ✅ Grade {grade} - {grade_info['description']}<br>
+                    <small>Level {grade_info['min_level']}-{grade_info['max_level'] if grade_info['max_level'] != float('inf') else '∞'} - COMPLETED</small>
+                </div>
+                """
+            else:
+                grade_html = f"""
+                <div style="
+                    background: #333;
+                    border: 2px dashed #666;
+                    border-radius: 8px;
+                    padding: 8px;
+                    margin: 4px 0;
+                    color: #888;
+                    font-size: 1rem;
+                    text-align: center;
+                    opacity: 0.5;
+                ">
+                    🔒 Grade {grade} - {grade_info['description']}<br>
+                    <small>Requires Level {grade_info['min_level']}</small>
+                </div>
+                """
+
+            st.markdown(grade_html, unsafe_allow_html=True)
+
+        if next_grade and next_info:
+            levels_needed = next_info["min_level"] - current_level
+        else:
+            st.success("🌟 **Congratulations!** You've achieved the highest grade possible!")
 
 
 def generate_rps_problem():
@@ -186,7 +355,6 @@ BASE_ANSWER_TIME_LIMIT = 15.0
 def get_answer_time_limit():
     intelligence = st.session_state.player.get('intelligence', 5)
     return BASE_ANSWER_TIME_LIMIT + (intelligence - 5)
-
 
 def apply_custom_styling():
     st.markdown("""
@@ -348,6 +516,13 @@ def apply_custom_styling():
                 border-color: #e74c3c;
                 background-color: #ffeaa7;
                 transform: scale(1.05);
+            }
+
+            /* Grade ladder animation */
+            @keyframes pulse {
+                0% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.8; transform: scale(1.02); }
+                100% { opacity: 1; transform: scale(1); }
             }
 
         </style>
@@ -593,9 +768,52 @@ def render_enemy_display():
     if not enemy:
         return
 
+
     img_col, stats_col = st.columns([1, 2])
 
+
     with img_col:
+        shoutout = get_enemy_shoutout(enemy['name'])
+
+        st.markdown(f"""
+                    <div style="
+                        position: relative;
+                        background: white;
+                        border: 3px solid #333;
+                        border-radius: 20px;
+                        padding: 15px 20px;
+                        margin: 0 auto 20px auto;
+                        max-width: 300px;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        text-align: center;
+                        color: #333;
+                        box-shadow: 3px 3px 0px #666;
+                        transform: rotate(-2deg);
+                    ">
+                        "{shoutout}"
+                        <div style="
+                            position: absolute;
+                            bottom: -15px;
+                            left: 50px;
+                            width: 0;
+                            height: 0;
+                            border-left: 15px solid transparent;
+                            border-right: 15px solid transparent;
+                            border-top: 15px solid white;
+                        "></div>
+                        <div style="
+                            position: absolute;
+                            bottom: -18px;
+                            left: 47px;
+                            width: 0;
+                            height: 0;
+                            border-left: 18px solid transparent;
+                            border-right: 18px solid transparent;
+                            border-top: 18px solid #333;
+                        "></div>
+                    </div>
+                """, unsafe_allow_html=True)
         st.image(enemy["image_path"])
 
     with stats_col:
@@ -604,7 +822,8 @@ def render_enemy_display():
         st.progress(enemy['hp'] / enemy['max_hp'], text=f"{enemy['hp']}/{enemy['max_hp']}")
         st.info(f"⚔️ Attack: {enemy['attack']} | 🎯 Accuracy: {enemy['accuracy']}% | 💨 Speed: {enemy['speed']}")
 
-    st.divider()
+
+
 
 
 
@@ -617,7 +836,7 @@ def render_victory_screen():
     st.subheader(f"You defeated the {summary.get('enemy_name', 'enemy')}!")
 
     st.success(f"**XP Gained:** {summary.get('xp_gain', 0)}")
-    st.error(f"**Damage Taken:** {summary.get('damage_taken', 0)}")
+    st.error(f"**Damage Taken:** {round(summary.get('damage_taken', 0), 1)}")
 
     bonuses = summary.get('bonuses', [])
     if bonuses:
@@ -766,7 +985,7 @@ def handle_mcq_turn(selected_option):
 
     if not is_correct:
         correct_option_text = problem['options'][problem['correct']]
-        correct_letter = chr(65 + problem['correct'])  # Convert to A, B, C, D
+        correct_letter = chr(65 + problem['correct'])
         log_message(f"❌ Wrong answer! The correct answer was **{correct_letter}. {correct_option_text}**.")
 
     if player_speed >= enemy_speed:
@@ -840,7 +1059,22 @@ def auto_refresh_timer():
 
     if time_left <= 0 and not st.session_state.get('time_out_attack_done', False):
         st.session_state.time_out_attack_done = True
+
+        problem = st.session_state.current_problem
+
         log_message("⏰ Time's up! The enemy takes advantage of your hesitation!")
+
+        if problem["type"] == "math":
+            log_message(f"❌ The correct answer to **{problem['question']}** was **{problem['answer']}**.")
+        elif problem["type"] == "multiple_choice":
+            correct_option_text = problem['options'][problem['correct']]
+            correct_letter = chr(65 + problem['correct'])
+            log_message(f"❌ The correct answer was **{correct_letter}. {correct_option_text}**.")
+        elif problem["type"] == "numerical":
+            log_message(f"❌ The correct answer was **{problem['answer']}**.")
+        elif problem["type"] == "rps":
+            log_message(f"The enemy chose: {RPS_EMOJIS[problem['enemy_choice']]} **{problem['enemy_choice']}**")
+
         enemy_attack()
         commit_round_log()
         if not st.session_state.get("game_over"):
@@ -883,16 +1117,14 @@ def main():
     elif st.session_state.current_enemy is None:
         render_victory_screen()
     else:
-        st.subheader(f"Dungeon Level: {st.session_state.dungeon_level}")
+        question_col, enemy_col = st.columns([2, 1.5])
 
-        action_col, log_col = st.columns([2, 1])
-
-        with action_col:
-            render_enemy_display()
-
+        with question_col:
+            st.subheader(f"🏰 Dungeon Level: {st.session_state.dungeon_level}")
+            st.divider()
             problem = st.session_state.current_problem
             if not hasattr(st.session_state, 'question_start_time') or st.session_state.question_start_time is None:
-                return  # Skip the rest if timing isn't initialized yet
+                return
 
             time_elapsed = time.time() - st.session_state.question_start_time
             time_limit = get_answer_time_limit()
@@ -905,8 +1137,6 @@ def main():
                             unsafe_allow_html=True)
 
             st.progress(time_left / time_limit, text=f"⌛ Time is ticking...")
-
-
 
             if problem["type"] == "math":
                 st.markdown(f'<p class="math-question">Solve this:<br><code>{problem["question"]}</code></p>',
@@ -921,8 +1151,6 @@ def main():
                         handle_math_turn(user_answer)
 
             elif problem["type"] == "multiple_choice":
-                # st.markdown(f'<div class="mcq-question">📚 {problem["topic"]} Question:<br>{problem["question"]}</div>',
-                #            unsafe_allow_html=True)
                 st.markdown(f'<div class="mcq-question">📚 {problem["question"]}</div>',
                             unsafe_allow_html=True)
                 with st.form("mcq_form", clear_on_submit=True):
@@ -936,6 +1164,7 @@ def main():
                     submitted = st.form_submit_button("Attack!", use_container_width=True, type="primary")
                     if submitted:
                         handle_mcq_turn(selected_option)
+
             elif problem["type"] == "numerical":
                 st.markdown(f'<div class="mcq-question">🔢 {problem["topic"]}<br>{problem["question"]}</div>',
                             unsafe_allow_html=True)
@@ -947,6 +1176,7 @@ def main():
                     submitted = st.form_submit_button("Attack!", use_container_width=True, type="primary")
                     if submitted and user_answer is not None:
                         handle_numerical_turn(int(user_answer))
+
             elif problem["type"] == "rps":
                 st.markdown(f'<div class="rps-question">🎯 Battle of Wits<br>{problem["question"]}</div>',
                             unsafe_allow_html=True)
@@ -979,8 +1209,19 @@ def main():
                         handle_rps_turn("Paper")
                     elif scissors_button:
                         handle_rps_turn("Scissors")
+
+        with enemy_col:
+            st.divider()
+            render_enemy_display()
+
+
+        log_col, grade_col = st.columns([2, 1])
+
         with log_col:
             render_game_log()
+
+        with grade_col:
+            render_grade_ladder()
 
 
 if __name__ == "__main__":
