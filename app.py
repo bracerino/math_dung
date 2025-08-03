@@ -42,7 +42,7 @@ ENEMY_BASE_STATS = {
 
 ENEMIES_LIST = [
     {"name": "Dr. Amorpho",
-     "image": "images/dr_amorpho.png"},
+     "image": "images/dramorpho.png"},
     {"name": "Entropy",
      "image": "images/entropy.png"},
     {"name": "Dislocator",
@@ -188,12 +188,21 @@ RPS_STAT_BONUSES = [
     {"type": "max_hp", "amount": 2, "message": "❤️ Your confidence boosts your vitality! +10 Max HP"}
 ]
 GRADE_THRESHOLDS = {
-    "F": {"min_level": 1, "max_level": 1, "color": "#ff4444", "description": "Novice Explorer"},
-    "E": {"min_level": 2, "max_level": 3, "color": "#ff6666", "description": "Dungeon Newcomer"},
-    "D": {"min_level": 4, "max_level": 5, "color": "#ff8800", "description": "Dungeon Crawler"},
-    "C": {"min_level": 6, "max_level": 7, "color": "#ffcc00", "description": "Skilled Adventurer"},
-    "B": {"min_level": 8, "max_level": 9, "color": "#88cc00", "description": "Veteran Warrior"},
-    "A": {"min_level": 10, "max_level": float('inf'), "color": "#44aa44", "description": "Elite Champion"}
+    "F": {"min_level": 1, "max_level": 1, "color": "#ff4444", "description": "Novice"},
+    "E": {"min_level": 2, "max_level": 2, "color": "#ff5555", "description": "Newcomer"},
+    "D": {"min_level": 3, "max_level": 3, "color": "#ff6666", "description": "Beginner"},
+    "C-": {"min_level": 4, "max_level": 4, "color": "#ff8800", "description": "Learner"},
+    "C": {"min_level": 5, "max_level": 5, "color": "#ffaa00", "description": "Crawler"},
+    "C+": {"min_level": 6, "max_level": 6, "color": "#ffcc00", "description": "Explorer"},
+    "B-": {"min_level": 7, "max_level": 7, "color": "#cccc00", "description": "Seeker"},
+    "B": {"min_level": 8, "max_level": 8, "color": "#aacc00", "description": "Warrior"},
+    "B+": {"min_level": 9, "max_level": 9, "color": "#88cc00", "description": "Fighter"},
+    "A-": {"min_level": 10, "max_level": 11, "color": "#66aa44", "description": "Veteran"},
+    "A": {"min_level": 12, "max_level": 13, "color": "#44aa44", "description": "Elite"},
+    "A+": {"min_level": 14, "max_level": 15, "color": "#22aa22", "description": "Master"},
+    "S-": {"min_level": 16, "max_level": 18, "color": "#4488ff", "description": "Legend"},
+    "S": {"min_level": 19, "max_level": 22, "color": "#2266ff", "description": "Champion"},
+    "S+": {"min_level": 23, "max_level": float('inf'), "color": "#0044ff", "description": "Godlike"}
 }
 
 
@@ -205,7 +214,7 @@ def get_current_grade(dungeon_level):
 
 
 def get_next_grade_info(current_grade):
-    grade_order = ["F", "E", "D", "C", "B", "A"]
+    grade_order = ["F", "E", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"]
     current_index = grade_order.index(current_grade)
 
     if current_index < len(grade_order) - 1:
@@ -221,77 +230,188 @@ def render_grade_ladder():
 
     st.subheader("🏆 Achievement Ladder")
 
-    ladder_container = st.container()
 
-    with ladder_container:
-        grade_order = ["A", "B", "C", "D", "E", "F"]
+    col1, col2 = st.columns(2)
 
-        for grade in grade_order:
-            grade_info = GRADE_THRESHOLDS[grade]
-            is_current = (grade == current_grade)
-            is_achieved = current_level >= grade_info["min_level"]
+    with col1:
+        # Current grade
+        st.markdown(f"""
+        <div style="
+            background: linear-gradient(90deg, {current_info['color']}, {current_info['color']}aa);
+            border: 2px solid {current_info['color']};
+            border-radius: 8px;
+            padding: 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        ">
+            🎖️ Current<br>
+            <span style="font-size: 1.1rem;">{current_grade}</span><br>
+            <small style="font-size: 0.7rem;">{current_info['description']}<br>Level {current_level}</small>
+        </div>
+        """, unsafe_allow_html=True)
 
-
-            if is_current:
-                grade_html = f"""
-                <div style="
-                    background: linear-gradient(90deg, {grade_info['color']}, {grade_info['color']}88);
-                    border: 3px solid {grade_info['color']};
-                    border-radius: 12px;
-                    padding: 12px;
-                    margin: 8px 0;
-                    color: white;
-                    font-weight: bold;
-                    font-size: 1.2rem;
-                    text-align: center;
-                    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-                    animation: pulse 2s infinite;
-                ">
-                    🎖️ Grade {grade} - {grade_info['description']}<br>
-                    <small style="font-size: 0.9rem;">Level {grade_info['min_level']}-{grade_info['max_level'] if grade_info['max_level'] != float('inf') else '∞'} | Current: Level {current_level}</small>
-                </div>
-                """
-            elif is_achieved:
-                grade_html = f"""
-                <div style="
-                    background: linear-gradient(90deg, #666, #888);
-                    border: 2px solid #555;
-                    border-radius: 8px;
-                    padding: 8px;
-                    margin: 4px 0;
-                    color: #ccc;
-                    font-size: 1rem;
-                    text-align: center;
-                    opacity: 0.7;
-                ">
-                    ✅ Grade {grade} - {grade_info['description']}<br>
-                    <small>Level {grade_info['min_level']}-{grade_info['max_level'] if grade_info['max_level'] != float('inf') else '∞'} - COMPLETED</small>
-                </div>
-                """
-            else:
-                grade_html = f"""
-                <div style="
-                    background: #333;
-                    border: 2px dashed #666;
-                    border-radius: 8px;
-                    padding: 8px;
-                    margin: 4px 0;
-                    color: #888;
-                    font-size: 1rem;
-                    text-align: center;
-                    opacity: 0.5;
-                ">
-                    🔒 Grade {grade} - {grade_info['description']}<br>
-                    <small>Requires Level {grade_info['min_level']}</small>
-                </div>
-                """
-
-            st.markdown(grade_html, unsafe_allow_html=True)
-
+    with col2:
+        # Next grade or max achievement
         if next_grade and next_info:
             levels_needed = next_info["min_level"] - current_level
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(90deg, {next_info['color']}, {next_info['color']}66);
+                border: 2px dashed {next_info['color']};
+                border-radius: 8px;
+                padding: 6px;
+                color: white;
+                font-weight: bold;
+                font-size: 0.9rem;
+                text-align: center;
+                opacity: 0.8;
+            ">
+                🎯 Next<br>
+                <span style="font-size: 1.1rem;">{next_grade}</span><br>
+                <small style="font-size: 0.7rem;">{next_info['description']}<br>+{levels_needed} level(s)</small>
+            </div>
+            """, unsafe_allow_html=True)
         else:
-            st.success("🌟 **Congratulations!** You've achieved the highest grade possible!")
+            st.markdown(f"""
+            <div style="
+                background: linear-gradient(90deg, #ffd700, #ffed4e);
+                border: 2px solid #ffd700;
+                border-radius: 8px;
+                padding: 6px;
+                color: #333;
+                font-weight: bold;
+                font-size: 0.9rem;
+                text-align: center;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            ">
+                🌟 Max<br>
+                <span style="font-size: 1.1rem;">DONE!</span><br>
+                <small style="font-size: 0.7rem;">Ultimate<br>Champion</small>
+            </div>
+            """, unsafe_allow_html=True)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+
+    st.markdown("**Progress Overview:**")
+
+
+    grade_order = ["F", "E", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"]
+    progress_html = '<div style="display: flex; gap: 2px; margin: 10px 0;">'
+
+    for grade in grade_order:
+        grade_info = GRADE_THRESHOLDS[grade]
+        is_current = (grade == current_grade)
+        is_achieved = current_level >= grade_info["min_level"]
+
+        if is_current:
+            progress_html += f'''
+            <div style="
+                flex: 1;
+                height: 25px;
+                background: {grade_info['color']};
+                border: 2px solid white;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-weight: bold;
+                font-size: 0.8rem;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            " title="Current: {grade} - {grade_info['description']} (Level {current_level})">
+                {grade}
+            </div>'''
+        elif is_achieved:
+            progress_html += f'''
+            <div style="
+                flex: 1;
+                height: 20px;
+                background: {grade_info['color']};
+                border-radius: 3px;
+                opacity: 0.6;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 0.7rem;
+            " title="Completed: {grade} - {grade_info['description']}">
+                ✓
+            </div>'''
+        else:
+            # Future grades
+            progress_html += f'''
+            <div style="
+                flex: 1;
+                height: 15px;
+                background: #555;
+                border-radius: 3px;
+                opacity: 0.4;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #aaa;
+                font-size: 0.6rem;
+            " title="Locked: {grade} - {grade_info['description']} (Need Level {grade_info['min_level']})">
+                {grade}
+            </div>'''
+
+    progress_html += '</div>'
+    st.markdown(progress_html, unsafe_allow_html=True)
+
+
+    st.markdown("**Nearby Grades:**")
+    current_index = grade_order.index(current_grade)
+    start_index = max(0, current_index - 1)
+    end_index = min(len(grade_order), current_index + 3)
+    visible_grades = grade_order[start_index:end_index]
+
+    for grade in visible_grades:
+        grade_info = GRADE_THRESHOLDS[grade]
+        is_current = (grade == current_grade)
+        is_achieved = current_level >= grade_info["min_level"]
+
+        if is_current:
+            continue
+        elif is_achieved:
+            st.markdown(f'''
+            <div style="
+                background: linear-gradient(90deg, #555, #777);
+                border-radius: 6px;
+                padding: 4px 8px;
+                margin: 2px 0;
+                color: #ccc;
+                font-size: 0.85rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <span>✅ <strong>{grade}</strong> - {grade_info['description']}</span>
+                <small>Lvl {grade_info['min_level']}-{grade_info['max_level'] if grade_info['max_level'] != float('inf') else '∞'}</small>
+            </div>
+            ''', unsafe_allow_html=True)
+        else:
+            levels_to_unlock = grade_info['min_level'] - current_level
+            st.markdown(f'''
+            <div style="
+                background: #333;
+                border: 1px dashed #666;
+                border-radius: 6px;
+                padding: 4px 8px;
+                margin: 2px 0;
+                color: #888;
+                font-size: 0.85rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            ">
+                <span>🔒 <strong>{grade}</strong> - {grade_info['description']}</span>
+                <small>+{levels_to_unlock} levels</small>
+            </div>
+            ''', unsafe_allow_html=True)
 
 
 def generate_rps_problem():
@@ -314,6 +434,9 @@ def handle_rps_turn(player_choice):
 
         if time_taken > time_limit:
             log_message("⏰ Too slow! The enemy takes advantage of your hesitation!")
+
+            st.session_state.battle_summary["total_questions"] += 1
+            st.session_state.battle_summary["questions_wrong"] += 1
             enemy_attack()
             commit_round_log()
             if st.session_state.current_enemy:
@@ -323,6 +446,8 @@ def handle_rps_turn(player_choice):
 
     problem = st.session_state.current_problem
     enemy_choice = problem["enemy_choice"]
+
+    st.session_state.battle_summary["total_questions"] += 1
 
     log_message(f"You chose: {RPS_EMOJIS[player_choice]} **{player_choice}**")
     log_message(f"Enemy chose: {RPS_EMOJIS[enemy_choice]} **{enemy_choice}**")
@@ -352,7 +477,7 @@ def handle_rps_turn(player_choice):
 
     elif result == "lose":
         log_message("😤 **The enemy outsmarts you!**")
-
+        st.session_state.battle_summary["questions_wrong"] += 1
         enemy_attack()
 
     else:
@@ -446,14 +571,6 @@ def apply_custom_styling():
                 font-size: 2rem !important;
                 color: #ff4b4b;
             }
-            
-            .stNumberInput input {
-                font-size: 2rem !important;
-                text-align: center !important;
-                font-weight: bold !important;
-                height: 3rem !important;
-            }
-            
             .mcq-question {
                 font-size: 1.5rem !important;
                 font-weight: bold;
@@ -465,10 +582,10 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .mcq-option {
-                font-size: 1.8rem !important;  
+                font-size: 1.3rem !important;
                 font-weight: 500;
-                padding: 1.2rem !important;    
-                margin: 0.5rem !important;    
+                padding: 0.8rem;
+                margin: 0.3rem;
                 border: 2px solid #ddd;
                 border-radius: 8px;
                 background-color: #f8f9fa;
@@ -490,36 +607,20 @@ def apply_custom_styling():
                 gap: 0.5rem !important;
             }
 
+            /* Fixed styling for dark mode compatibility */
             .stRadio [role="radiogroup"] > label {
                 margin: 0 !important;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 2.2rem !important;  
-                font-weight: 600 !important;   
-                padding: 1.5rem !important;    
-                border: 3px solid var(--border-color, #ddd) !important;
-                border-radius: 12px !important;
+                font-size: 1.3rem !important;
+                font-weight: 500 !important;
+                padding: 0.8rem !important;
+                border: 2px solid var(--border-color, #ddd) !important;
+                border-radius: 8px !important;
                 background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
                 color: var(--text-color, inherit) !important;
                 cursor: pointer !important;
                 transition: all 0.2s ease !important;
-                min-height: 5rem !important;   /* Taller buttons */
-                line-height: 1.3 !important;   /* Better line spacing */
-            }
-            
-            /* Target the actual text content inside radio buttons */
-            .stRadio [role="radiogroup"] > label > div:last-child {
-                font-size: 2.2rem !important;  /* Force larger text */
-                font-weight: 600 !important;
-                margin-left: 1rem !important;
-                flex: 1 !important;
-                line-height: 1.3 !important;
-            }
-            
-            /* Alternative targeting for radio button text */
-            .stRadio label span {
-                font-size: 2.2rem !important;
-                font-weight: 600 !important;
             }
 
             /* Light mode specific */
@@ -552,17 +653,14 @@ def apply_custom_styling():
             }
 
             .stRadio [role="radiogroup"] > label > div {
-                font-size: 2.2rem !important;  
-                margin-left: 1rem !important;
+                font-size: 1.3rem !important;
+                margin-left: 0.5rem !important;
                 color: inherit !important;
-                font-weight: 600 !important;
-                line-height: 1.3 !important;
             }
 
             /* Ensure radio button itself is visible */
             .stRadio [role="radiogroup"] > label input[type="radio"] {
                 accent-color: #007bff !important;
-                transform: scale(1.5) !important;  
             }
 
             .time-warning {
@@ -586,28 +684,20 @@ def apply_custom_styling():
                 margin-bottom: 1rem;
             }
             .rps-option {
-                font-size: 4rem !important;   
+                font-size: 3rem !important;
                 text-align: center;
-                padding: 1.5rem !important;   
+                padding: 1rem;
                 margin: 0.5rem;
                 border: 3px solid #ddd;
                 border-radius: 15px;
                 background-color: #f8f9fa;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                min-height: 6rem !important;  
             }
             .rps-option:hover {
                 border-color: #e74c3c;
                 background-color: #ffeaa7;
                 transform: scale(1.05);
-            }
-            
-            /* Style for RPS form submit buttons */
-            .stForm button[type="submit"] {
-                font-size: 1.5rem !important;  /* Increased button text */
-                padding: 1rem 1.5rem !important;
-                min-height: 4rem !important;
             }
 
             /* Grade ladder animation */
@@ -649,7 +739,6 @@ def reset_game_state():
     st.session_state.auto_refresh_placeholder = None
     generate_enemy()
 
-
 def generate_enemy():
     enemy_multiplier = 0.65
     level = st.session_state.dungeon_level
@@ -666,10 +755,11 @@ def generate_enemy():
         "speed": round(ENEMY_BASE_STATS["speed"] + (level // 2) * enemy_multiplier, 1),
         "xp_reward": ENEMY_BASE_STATS["xp_reward"] * level
     }
-    st.session_state.battle_summary = {"damage_taken": 0, "bonuses": []}
+    st.session_state.battle_summary = {"damage_taken": 0, "bonuses": [], "total_questions": 0, "questions_wrong": 0}
     st.session_state.current_problem = generate_problem()
     st.session_state.current_round_log = []
     log_message(f"A wild **{st.session_state.current_enemy['name']}** appears!")
+
 
 
 
@@ -706,6 +796,11 @@ def handle_numerical_turn(player_answer):
     problem = st.session_state.current_problem
     time_taken = time.time() - st.session_state.question_start_time
     is_correct = (player_answer == problem['answer'])
+
+
+    st.session_state.battle_summary["total_questions"] += 1
+    if not is_correct:
+        st.session_state.battle_summary["questions_wrong"] += 1
 
     bonus = calculate_time_bonus(time_taken)
 
@@ -915,24 +1010,46 @@ def render_enemy_display():
         st.info(f"⚔️ Attack: {enemy['attack']} | 🎯 Accuracy: {enemy['accuracy']}% | 💨 Speed: {enemy['speed']}")
 
 
-
-
-
-
-
 def render_victory_screen():
     summary = st.session_state.battle_summary
+    current_grade, current_info = get_current_grade(st.session_state.dungeon_level)
+
     st.header("Victory!")
     st.balloons()
 
-    st.subheader(f"You defeated the {summary.get('enemy_name', 'enemy')}!")
+    # Two column layout for victory details
+    col1, col2 = st.columns([1, 1])
 
-    st.success(f"**XP Gained:** {summary.get('xp_gain', 0)}")
-    st.error(f"**Damage Taken:** {round(summary.get('damage_taken', 0), 1)}")
+    with col1:
+        st.subheader(f"You defeated the {summary.get('enemy_name', 'enemy')}!")
+        st.success(f"**XP Gained:** {summary.get('xp_gain', 0)}")
+        st.error(f"**Damage Taken:** {round(summary.get('damage_taken', 0), 1)}")
+
+        total_questions = summary.get('total_questions', 0)
+        questions_wrong = summary.get('questions_wrong', 0)
+        questions_right = total_questions - questions_wrong
+
+        if total_questions > 0:
+            accuracy_percentage = (questions_right / total_questions) * 100
+            st.info(f"**Battle Accuracy:** {questions_right}/{total_questions} correct ({accuracy_percentage:.1f}%)")
+        else:
+            st.info("**Battle Accuracy:** No questions answered")
+
+    with col2:
+        st.subheader("Current Status")
+        st.metric("Current Level", st.session_state.dungeon_level)
+        st.metric("Current Grade", f"{current_grade} - {current_info['description']}")
+
+        next_grade, next_info = get_next_grade_info(current_grade)
+        if next_grade and next_info:
+            levels_needed = next_info["min_level"] - st.session_state.dungeon_level
+            st.metric("Next Grade", f"{next_grade} (Need {levels_needed} more levels)")
+        else:
+            st.success("🌟 **Maximum Grade Achieved!**")
 
     bonuses = summary.get('bonuses', [])
     if bonuses:
-        st.info("Time Bonuses Earned:")
+        st.info("Battle Bonuses Earned:")
         for b in bonuses:
             st.write(f"- {b}")
 
@@ -1038,9 +1155,15 @@ def handle_victory():
 
 
 def handle_math_turn(player_answer):
+
     problem = st.session_state.current_problem
     time_taken = time.time() - st.session_state.question_start_time
     is_correct = (player_answer == problem['answer'])
+
+
+    st.session_state.battle_summary["total_questions"] += 1
+    if not is_correct:  # or if result == "lose" for RPS
+        st.session_state.battle_summary["questions_wrong"] += 1
 
     bonus = calculate_time_bonus(time_taken)
 
@@ -1066,9 +1189,15 @@ def handle_math_turn(player_answer):
 
 
 def handle_mcq_turn(selected_option):
+
     problem = st.session_state.current_problem
     time_taken = time.time() - st.session_state.question_start_time
     is_correct = (selected_option == problem['correct'])
+
+
+    st.session_state.battle_summary["total_questions"] += 1
+    if not is_correct:
+        st.session_state.battle_summary["questions_wrong"] += 1
 
     bonus = calculate_time_bonus(time_taken)
 
@@ -1152,6 +1281,10 @@ def auto_refresh_timer():
     if time_left <= 0 and not st.session_state.get('time_out_attack_done', False):
         st.session_state.time_out_attack_done = True
 
+
+        st.session_state.battle_summary["total_questions"] += 1
+        st.session_state.battle_summary["questions_wrong"] += 1
+
         problem = st.session_state.current_problem
 
         log_message("⏰ Time's up! The enemy takes advantage of your hesitation!")
@@ -1188,12 +1321,95 @@ def main():
             st.write("The depths of Numeria have claimed another brave soul. But your legend will be remembered.")
             st.metric("Dungeon Level Reached", st.session_state.dungeon_level)
 
+            current_grade, current_info = get_current_grade(st.session_state.dungeon_level)
+            st.metric("Final Grade Achieved", f"{current_grade} - {current_info['description']}")
+
         with col2:
             st.subheader("Final Stats")
             player = st.session_state.player
             st.write(f"**Level:** {player['level']}")
             st.info(
                 f"⚔️ Attack: {player['attack']} | 🎯 Accuracy: {player['accuracy']}% | 💨 Speed: {player['speed']} | 🧠 Intelligence: {player['intelligence']}")
+
+        st.divider()
+
+        st.subheader("🏆 Your Achievement Progress")
+
+        grade_order = ["F", "E", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"]
+        current_level = st.session_state.dungeon_level
+        current_grade, current_info = get_current_grade(current_level)
+
+        progress_html = '<div style="display: flex; gap: 2px; margin: 10px 0;">'
+
+        for grade in grade_order:
+            grade_info = GRADE_THRESHOLDS[grade]
+            is_current = (grade == current_grade)
+            is_achieved = current_level >= grade_info["min_level"]
+
+            if is_current:
+                progress_html += f'''
+                <div style="
+                    flex: 1;
+                    height: 30px;
+                    background: {grade_info['color']};
+                    border: 2px solid white;
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                " title="Final Grade: {grade} - {grade_info['description']} (Level {current_level})">
+                    {grade}
+                </div>'''
+            elif is_achieved:
+                progress_html += f'''
+                <div style="
+                    flex: 1;
+                    height: 25px;
+                    background: {grade_info['color']};
+                    border-radius: 3px;
+                    opacity: 0.7;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 0.8rem;
+                    font-weight: bold;
+                " title="Completed: {grade} - {grade_info['description']}">
+                    ✓
+                </div>'''
+            else:
+                progress_html += f'''
+                <div style="
+                    flex: 1;
+                    height: 20px;
+                    background: #333;
+                    border-radius: 3px;
+                    opacity: 0.3;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #666;
+                    font-size: 0.7rem;
+                " title="Not Reached: {grade} - {grade_info['description']} (Need Level {grade_info['min_level']})">
+                    {grade}
+                </div>'''
+
+        progress_html += '</div>'
+        st.markdown(progress_html, unsafe_allow_html=True)
+
+
+        achieved_grades = [grade for grade in grade_order if current_level >= GRADE_THRESHOLDS[grade]["min_level"]]
+        st.info(f"**Grades Achieved:** {len(achieved_grades)}/15 - You unlocked {', '.join(achieved_grades)}")
+
+        next_grade, next_info = get_next_grade_info(current_grade)
+        if next_grade and next_info:
+            levels_short = next_info["min_level"] - current_level
+            st.warning(
+                f"**So Close!** You were {levels_short} level(s) away from {next_grade} - {next_info['description']}")
 
         st.divider()
         st.subheader("A new adventure awaits...")
@@ -1249,7 +1465,7 @@ def main():
                     selected_option = st.radio(
                         "Choose your answer:",
                         options=range(len(problem["options"])),
-                        format_func=lambda x: f"{chr(65 + x)}. {problem['options'][x]}",
+                        format_func=lambda x: problem['options'][x],
                         key="mcq_answer_input",
                         label_visibility="collapsed"
                     )
