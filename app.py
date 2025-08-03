@@ -42,7 +42,7 @@ ENEMY_BASE_STATS = {
 
 ENEMIES_LIST = [
     {"name": "Dr. Amorpho",
-     "image": "images/dramorpho.png"},
+     "image": "images/dr_amorpho.png"},
     {"name": "Entropy",
      "image": "images/entropy.png"},
     {"name": "Dislocator",
