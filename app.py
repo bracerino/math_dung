@@ -1461,7 +1461,7 @@ def main():
             elif problem["type"] == "multiple_choice":
                 st.markdown(f'<div class="mcq-question">📚 {problem["question"]}</div>',
                             unsafe_allow_html=True)
-                with st.form("mcq_form", clear_on_submit=True):
+                with st.form("mcq_form"):
                     selected_option = st.radio(
                         "Choose your answer:",
                         options=range(len(problem["options"])),
