@@ -8,13 +8,126 @@ st.set_page_config(layout="wide", initial_sidebar_state="expanded", )
 
 def render_game_log():
     st.subheader("Last Round")
+
+    if st.session_state.game_log:
+        if st.session_state.game_log:
+            log_text = " ".join(st.session_state.game_log)
+
+            has_correct_explicit = "✅" in log_text or "Correct!" in log_text or "Perfect knowledge!" in log_text
+            has_healing_bonus = "heal" in log_text and "HP" in log_text
+            has_speed_bonus = "Quick thinking!" in log_text and "bonus damage" in log_text
+            has_missed_attack = "Your attack missed!" in log_text
+
+            has_correct = has_correct_explicit or has_healing_bonus or has_speed_bonus or has_missed_attack
+
+            has_timeout = "⏰" in log_text or "Too slow!" in log_text
+            has_rps_win = "You WIN the battle of wits!" in log_text
+            has_rps_lose = "The enemy outsmarts you!" in log_text
+            has_rps_tie = "It's a tie!" in log_text
+
+            has_wrong_answer = "Wrong answer!" in log_text or "The correct answer was" in log_text
+
+            if has_timeout:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #FF9800, #FFB74D);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                ⏰ TIME OUT
+            </div>
+            """, unsafe_allow_html=True)
+            elif has_rps_win:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #9C27B0, #BA68C8);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                🧠 WIT VICTORY
+            </div>
+            """, unsafe_allow_html=True)
+            elif has_rps_lose:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #8D6E63, #A1887F);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                🤔 OUTSMARTED
+            </div>
+            """, unsafe_allow_html=True)
+            elif has_rps_tie:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #607D8B, #78909C);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                🤝 STALEMATE
+            </div>
+            """, unsafe_allow_html=True)
+            elif has_correct and not has_wrong_answer:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #4CAF50, #66BB6A);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                ✅ CORRECT
+            </div>
+            """, unsafe_allow_html=True)
+            elif has_wrong_answer:
+                st.markdown(f"""
+            <div style="
+                text-align: center;
+                font-size: 3rem;
+                padding: 10px;
+                margin: 10px 0;
+                background: linear-gradient(90deg, #D32F2F, #E57373);
+                border-radius: 15px;
+                color: white;
+                font-weight: bold;
+            ">
+                ❌ INCORRECT
+            </div>
+            """, unsafe_allow_html=True)
+
+
     log_container = st.container(height=350)
     if st.session_state.game_log:
         for msg in st.session_state.game_log:
-            log_container.markdown(f'<div style="color: inherit; margin: 0.25rem 0; padding: 0.25rem; border-left: 3px solid #4CAF50; padding-left: 0.75rem; background-color: rgba(76, 175, 80, 0.05);">{msg}</div>', unsafe_allow_html=True)
+            log_container.markdown(
+                f'<div style="color: inherit; margin: 0.25rem 0; padding: 0.25rem; border-left: 3px solid #4CAF50; padding-left: 0.75rem; background-color: rgba(76, 175, 80, 0.05);">{msg}</div>',
+                unsafe_allow_html=True)
     else:
-        log_container.markdown('<div style="color: inherit; font-style: italic;">Battle begins...</div>', unsafe_allow_html=True)
-
+        log_container.markdown('<div style="color: inherit; font-style: italic;">Battle begins...</div>',
+                               unsafe_allow_html=True)
 
 
 PLAYER_INITIAL_STATS = {
@@ -607,54 +720,47 @@ def apply_custom_styling():
                 gap: 0.5rem !important;
             }
 
-            /* Fixed styling for dark mode compatibility */
+            /* Radio Buttons*/
             .stRadio [role="radiogroup"] > label {
                 margin: 0 !important;
                 display: flex !important;
                 align-items: center !important;
-                font-size: 1.3rem !important;
-                font-weight: 500 !important;
-                padding: 0.8rem !important;
-                border: 2px solid var(--border-color, #ddd) !important;
+                font-size: 2rem !important;
+                font-weight: 700 !important;
+                padding: 1.2rem !important;
+                border: 2px solid #007bff !important;
                 border-radius: 8px !important;
-                background-color: var(--bg-color, rgba(255, 255, 255, 0.05)) !important;
-                color: var(--text-color, inherit) !important;
                 cursor: pointer !important;
                 transition: all 0.2s ease !important;
+                /* Force contrasting colors */
+                background-color: #f8f9fa !important;
+                color: #333 !important;
             }
 
-            /* Light mode specific */
-            [data-theme="light"] .stRadio [role="radiogroup"] > label {
-                --border-color: #ddd;
-                --bg-color: #f8f9fa;
-                --text-color: #333;
-            }
-
-            /* Dark mode specific */  
-            [data-theme="dark"] .stRadio [role="radiogroup"] > label,
-            .stApp[data-theme="dark"] .stRadio [role="radiogroup"] > label {
-                --border-color: #555;
-                --bg-color: rgba(255, 255, 255, 0.1);
-                --text-color: #fff;
-            }
-
-            /* Fallback for dark mode detection */
+            /* Dark mode override */
             @media (prefers-color-scheme: dark) {
                 .stRadio [role="radiogroup"] > label {
-                    border-color: #555 !important;
-                    background-color: rgba(255, 255, 255, 0.1) !important;
-                    color: #fff !important;
+                    background-color: #2d3748 !important;
+                    color: #e2e8f0 !important;
+                    border-color: #4299e1 !important;
+                }
+                .stRadio [role="radiogroup"] > label:hover {
+                    background-color: #4a5568 !important;
+                    border-color: #63b3ed !important;
                 }
             }
 
+            /* Light mode hover */
             .stRadio [role="radiogroup"] > label:hover {
-                border-color: #007bff !important;
-                background-color: rgba(0, 123, 255, 0.2) !important;
+                border-color: #0056b3 !important;
+                background-color: #e3f2fd !important;
+                color: #333 !important;
             }
 
             .stRadio [role="radiogroup"] > label > div {
-                font-size: 1.3rem !important;
+                font-size: 2rem !important;
                 margin-left: 0.5rem !important;
+                /* Inherit the label color */
                 color: inherit !important;
             }
 
@@ -1016,6 +1122,12 @@ def render_victory_screen():
 
     st.header("Victory!")
     st.balloons()
+    st.divider()
+    if st.button("Descend to the next level", use_container_width=True, type="primary"):
+        st.session_state.dungeon_level += 1
+        st.toast(f"Entering Dungeon Level {st.session_state.dungeon_level}...", icon="⚔️")
+        generate_enemy()
+        st.rerun()
 
     # Two column layout for victory details
     col1, col2 = st.columns([1, 1])
@@ -1053,12 +1165,7 @@ def render_victory_screen():
         for b in bonuses:
             st.write(f"- {b}")
 
-    st.divider()
-    if st.button("Descend to the next level", use_container_width=True, type="primary"):
-        st.session_state.dungeon_level += 1
-        st.toast(f"Entering Dungeon Level {st.session_state.dungeon_level}...", icon="⚔️")
-        generate_enemy()
-        st.rerun()
+
 
 
 def calculate_time_bonus(time_taken):
@@ -1401,7 +1508,9 @@ def main():
         progress_html += '</div>'
         st.markdown(progress_html, unsafe_allow_html=True)
 
-
+        if st.button("Restart Your Quest", use_container_width=True, type="primary"):
+            reset_game_state()
+            st.rerun()
         achieved_grades = [grade for grade in grade_order if current_level >= GRADE_THRESHOLDS[grade]["min_level"]]
         st.info(f"**Grades Achieved:** {len(achieved_grades)}/15 - You unlocked {', '.join(achieved_grades)}")
 
@@ -1413,9 +1522,7 @@ def main():
 
         st.divider()
         st.subheader("A new adventure awaits...")
-        if st.button("Restart Your Quest", use_container_width=True, type="primary"):
-            reset_game_state()
-            st.rerun()
+
         return
 
     render_sidebar_stats()
@@ -1428,8 +1535,81 @@ def main():
         question_col, enemy_col = st.columns([2, 1.5])
 
         with question_col:
-            st.subheader(f"🏰 Dungeon Level: {st.session_state.dungeon_level}")
+            level_col, progress_col = st.columns([1, 2])
+
+            with level_col:
+                st.subheader(f"🏰 Dungeon Level: {st.session_state.dungeon_level}")
+
+            with progress_col:
+                current_level = st.session_state.dungeon_level
+                current_grade, current_info = get_current_grade(current_level)
+
+                grade_order = ["F", "E", "D", "C-", "C", "C+", "B-", "B", "B+", "A-", "A", "A+", "S-", "S", "S+"]
+                progress_html = '<div style="display: flex; gap: 2px; margin: 10px 0; align-items: center;">'
+
+                for grade in grade_order:
+                    grade_info = GRADE_THRESHOLDS[grade]
+                    is_current = (grade == current_grade)
+                    is_achieved = current_level >= grade_info["min_level"]
+
+                    if is_current:
+                        progress_html += f'''
+                                <div style="
+                                    flex: 1;
+                                    height: 25px;
+                                    background: {grade_info['color']};
+                                    border: 2px solid white;
+                                    border-radius: 4px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-weight: bold;
+                                    font-size: 0.8rem;
+                                    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+                                " title="Current: {grade} - {grade_info['description']} (Level {current_level})">
+                                    {grade}
+                                </div>'''
+                    elif is_achieved:
+                        progress_html += f'''
+                                <div style="
+                                    flex: 1;
+                                    height: 20px;
+                                    background: {grade_info['color']};
+                                    border-radius: 3px;
+                                    opacity: 0.6;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: white;
+                                    font-size: 0.7rem;
+                                " title="Completed: {grade} - {grade_info['description']}">
+                                    ✓
+                                </div>'''
+                    else:
+                        # Future grades
+                        progress_html += f'''
+                                <div style="
+                                    flex: 1;
+                                    height: 15px;
+                                    background: #555;
+                                    border-radius: 3px;
+                                    opacity: 0.4;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    color: #aaa;
+                                    font-size: 0.6rem;
+                                " title="Locked: {grade} - {grade_info['description']} (Need Level {grade_info['min_level']})">
+                                    {grade}
+                                </div>'''
+
+                progress_html += '</div>'
+                st.markdown(progress_html, unsafe_allow_html=True)
+
             st.divider()
+
+            # Rest of the existing code remains the same...
             problem = st.session_state.current_problem
             if not hasattr(st.session_state, 'question_start_time') or st.session_state.question_start_time is None:
                 return
@@ -1519,7 +1699,7 @@ def main():
                         handle_rps_turn("Scissors")
 
         with enemy_col:
-            st.divider()
+           # st.divider()
             render_enemy_display()
 
 
