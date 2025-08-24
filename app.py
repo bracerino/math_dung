@@ -31,11 +31,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #FF9800, #FFB74D);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
@@ -46,11 +46,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #9C27B0, #BA68C8);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
@@ -61,11 +61,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #8D6E63, #A1887F);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
@@ -76,11 +76,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #607D8B, #78909C);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
@@ -91,11 +91,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #4CAF50, #66BB6A);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
@@ -106,11 +106,11 @@ def render_game_log():
                 st.markdown(f"""
             <div style="
                 text-align: center;
-                font-size: 3rem;
-                padding: 10px;
-                margin: 10px 0;
+                font-size: 1.5rem;
+                padding: 6px;
+                margin: 6px 0;
                 background: linear-gradient(90deg, #D32F2F, #E57373);
-                border-radius: 15px;
+                border-radius: 10px;
                 color: white;
                 font-weight: bold;
             ">
